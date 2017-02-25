@@ -1,4 +1,4 @@
-package com.weiwei.controller;
+package com.weiwei.security.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
