@@ -10,21 +10,23 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 @Configuration
 @Order(-20)
-public class LoginConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
-	
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+		// @formatter:off
 		http
 			.formLogin().loginPage("/login").permitAll()
-			.and()
+		.and()
 			.requestMatchers().antMatchers("/login", "/oauth/authorize", "/oauth/confirm_access")
-			.and()
+		.and()
 			.authorizeRequests().anyRequest().authenticated();
+		// @formatter:on
 	}
-	
+
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.parentAuthenticationManager(authenticationManager);
