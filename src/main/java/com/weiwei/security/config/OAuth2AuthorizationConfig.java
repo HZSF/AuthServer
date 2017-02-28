@@ -2,6 +2,8 @@ package com.weiwei.security.config;
 
 import java.security.KeyPair;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,13 +17,31 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 
+import com.weiwei.security.service.impl.UserDetailsServiceImpl;
+
 @Configuration
 @EnableAuthorizationServer
 public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdapter {
 
 	@Autowired
+	private DataSource dataSource;
+
+	@Autowired
 	private AuthenticationManager authenticationManager;
 	
+	@Autowired
+    private UserDetailsServiceImpl userDetailsService;
+
+//	@Bean
+//	public JdbcTokenStore tokenStore() {
+//		return new JdbcTokenStore(dataSource);
+//	}
+//
+//	@Bean
+//	protected AuthorizationCodeServices authorizationCodeServices() {
+//		return new JdbcAuthorizationCodeServices(dataSource);
+//	}
+
 	@Bean
 	public JwtAccessTokenConverter jwtAccessTokenConverter() {
 		JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
@@ -30,24 +50,32 @@ public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
 		converter.setKeyPair(keyPair);
 		return converter;
 	}
-	
+
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		clients
-			.inMemory()
-			.withClient("acme")
-			.secret("acmesecret")
-			.authorizedGrantTypes("authorization_code", "refresh_token",
-				"password").scopes("openid");
+		clients.jdbc(dataSource);
+//		.withClient("acme")
+//        .authorizedGrantTypes("authorization_code", "password", "refresh_token")
+//        .authorities("USER")
+//        .scopes("read", "write")
+//        .secret("acmesecret");
+		// .inMemory()
+		// .withClient("acme")
+		// .secret("acmesecret")
+		// .authorizedGrantTypes("authorization_code", "refresh_token",
+		// "password").scopes("openid");
 	}
-	
+
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 		endpoints
+//			.authorizationCodeServices(authorizationCodeServices())
+//			.tokenStore(tokenStore())
+			.userDetailsService(userDetailsService)
 			.authenticationManager(authenticationManager)
 			.accessTokenConverter(jwtAccessTokenConverter());
 	}
-	
+
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
 		oauthServer.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()");
