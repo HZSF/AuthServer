@@ -14,42 +14,47 @@ public class User implements UserDetails {
 	public static UserDetails create(String username, String password, String... authorities) {
 		return new User(username, password, authorities);
 	}
-
-	private final Collection<GrantedAuthority> authorities_;
-	private final String password_;
-	private final String username_;
 	
+	public User() {
+		this("", "");
+	}
+
+	private Long id;
+	private final Collection<GrantedAuthority> authorities;
+	private final String password;
+	private final String username;
+
 	@SuppressWarnings("unchecked")
 	private User(String username, String password) {
 		this(username, password, Collections.EMPTY_LIST);
 	}
 	
 	private User(String username, String password, String...authorities) {
-		username_ = username;
-		password_ = password;
-		authorities_ = AuthorityUtils.createAuthorityList(authorities);
+		this.username = username;
+		this.password = password;
+		this.authorities = AuthorityUtils.createAuthorityList(authorities);
 	}
 	
 	private User(String username, String password, Collection<GrantedAuthority> authorities) {
 		super();
-		username_ = username;
-		password_ = password;
-		authorities_ = authorities;
+		this.username = username;
+		this.password = password;
+		this.authorities = authorities;
 	}
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return authorities_;
+		return authorities;
 	}
 
 	@Override
 	public String getPassword() {
-		return password_;
+		return password;
 	}
 
 	@Override
 	public String getUsername() {
-		return username_;
+		return username;
 	}
 
 	@Override
@@ -70,6 +75,14 @@ public class User implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 }
