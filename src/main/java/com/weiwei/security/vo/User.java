@@ -20,9 +20,9 @@ public class User implements UserDetails {
 	}
 
 	private Long id;
-	private final Collection<GrantedAuthority> authorities;
-	private final String password;
-	private final String username;
+	private Collection<GrantedAuthority> authorities;
+	private String password;
+	private String username;
 
 	@SuppressWarnings("unchecked")
 	private User(String username, String password) {
@@ -83,6 +83,22 @@ public class User implements UserDetails {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+//	public void setAuthorities(Collection<GrantedAuthority> authorities) {
+//		this.authorities = authorities;
+//	}
+	
+	public void setAutorities(String authorityString) {
+		this.authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(authorityString);
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 }

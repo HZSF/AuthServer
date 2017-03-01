@@ -1,5 +1,7 @@
 package com.weiwei.security.dao.impl;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -16,9 +18,10 @@ public class UserDaoImpl implements UserDao {
 	private JdbcTemplate jdbcTemplate;
 	
 	@Override
-	public User findByUsername(String username) {
+	public Optional<User> findByUsername(String username) {
 		String sql = "SELECT * FROM " + Constants.DBNAME_TRADE + "." + Constants.T_USER + " WHERE username = ?";
-		return jdbcTemplate.queryForObject(sql, new Object[]{username}, new BeanPropertyRowMapper<User>(User.class));
+		User user = jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<User>(User.class), username);
+		return Optional.ofNullable(user);
 	}
 
 }
