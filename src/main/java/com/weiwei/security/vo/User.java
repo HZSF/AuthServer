@@ -84,10 +84,6 @@ public class User implements UserDetails {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-//	public void setAuthorities(Collection<GrantedAuthority> authorities) {
-//		this.authorities = authorities;
-//	}
 	
 	public void setAutorities(String authorityString) {
 		this.authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(authorityString);
