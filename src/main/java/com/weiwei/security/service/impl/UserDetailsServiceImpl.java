@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.weiwei.security.dao.UserDao;
-import com.weiwei.security.vo.User;
+import com.weiwei.security.pojo.User;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {

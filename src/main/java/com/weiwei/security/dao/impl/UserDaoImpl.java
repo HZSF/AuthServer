@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.weiwei.security.common.Constants;
 import com.weiwei.security.dao.UserDao;
-import com.weiwei.security.vo.User;
+import com.weiwei.security.pojo.User;
 
 @Service
 public class UserDaoImpl implements UserDao {

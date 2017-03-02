@@ -2,7 +2,7 @@ package com.weiwei.security.dao;
 
 import java.util.Optional;
 
-import com.weiwei.security.vo.User;
+import com.weiwei.security.pojo.User;
 
 public interface UserDao {
 
