@@ -14,6 +14,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;
+import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
 import com.weiwei.security.service.impl.UserDetailsServiceImpl;
@@ -27,10 +28,10 @@ public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
-	
+
 	@Autowired
-    private UserDetailsServiceImpl userDetailsService;
-	
+	private UserDetailsServiceImpl userDetailsService;
+
 	private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 	@Bean
@@ -43,30 +44,34 @@ public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
 		return new JdbcAuthorizationCodeServices(dataSource);
 	}
 
+	@Bean
+	public DefaultTokenServices defaultTokenServices() {
+		DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
+		defaultTokenServices.setTokenStore(tokenStore());
+		return defaultTokenServices;
+	}
+
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 		clients.jdbc(dataSource).passwordEncoder(passwordEncoder);
 //		.withClient("acme")
-//        .authorizedGrantTypes("authorization_code", "password", "refresh_token")
-//        .authorities("ROLE_USER,ROLE_ADMIN")
-//        .scopes("read", "write")
-//        .secret("acmesecret");
+//		 .authorizedGrantTypes("authorization_code", "password",
+//		 "refresh_token")
+//		 .authorities("ROLE_USER","ROLE_ADMIN")
+//		 .scopes("read", "write")
+//		 .secret("acmesecret");
 	}
 
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-		endpoints
-			.authorizationCodeServices(authorizationCodeServices())
-			.tokenStore(tokenStore())
-			.userDetailsService(userDetailsService)
-			.authenticationManager(authenticationManager);
+		endpoints.authorizationCodeServices(authorizationCodeServices()).tokenStore(tokenStore())
+				.userDetailsService(userDetailsService).authenticationManager(authenticationManager);
 	}
 
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
-		oauthServer
-			.passwordEncoder(passwordEncoder)
-			.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()");
+		oauthServer.passwordEncoder(passwordEncoder);
+		oauthServer.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()");
 	}
 
 }
