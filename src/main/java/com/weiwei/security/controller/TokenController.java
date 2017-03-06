@@ -24,11 +24,11 @@ public class TokenController {
 	@Autowired
     private TokenStore tokenStore;
 
-	@RequestMapping(value = "/oauth/token/revoke", method = RequestMethod.GET)
+	@RequestMapping(value = "/revoke", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	public void revoke(HttpServletRequest request) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		logger.info("User " + authentication.getName() + "request logout.");
+		logger.info("User " + authentication.getName() + " request logout.");
 		String authHeader = request.getHeader("Authorization");
 		if (authHeader != null) {
 			String tokenValue = authHeader.replace("Bearer", "").trim();
