@@ -13,29 +13,31 @@ import org.springframework.security.oauth2.common.OAuth2RefreshToken;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping(value = "/token")
 public class TokenController {
 
 	final Logger logger = LoggerFactory.getLogger(this.getClass());
-	
-	@Autowired
-    private TokenStore tokenStore;
 
-	@RequestMapping(value = "/revoke", method = RequestMethod.GET)
+	@Autowired
+	private TokenStore tokenStore;
+
+	@RequestMapping(value = "/revoke", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
-	public void revoke(HttpServletRequest request) {
+	public void revoke(HttpServletRequest request, @RequestParam String refreshToken) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		logger.info("User " + authentication.getName() + " request logout.");
 		String authHeader = request.getHeader("Authorization");
 		if (authHeader != null) {
-			String tokenValue = authHeader.replace("Bearer", "").trim();
+			OAuth2RefreshToken refreshTokenEncap = tokenStore.readRefreshToken(refreshToken.trim());
+			tokenStore.removeRefreshToken(refreshTokenEncap);
+			String tokenValue = authHeader.replace("bearer", "").trim();
 			OAuth2AccessToken accessToken = tokenStore.readAccessToken(tokenValue);
 			tokenStore.removeAccessToken(accessToken);
-			OAuth2RefreshToken refreshToken = tokenStore.readRefreshToken(tokenValue);
-			tokenStore.removeRefreshToken(refreshToken);
 		}
 	}
 
