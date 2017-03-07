@@ -13,7 +13,7 @@ import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
 @Configuration
 @EnableResourceServer
-public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
+public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
 	@Autowired
 	private DataSource dataSource;
@@ -22,7 +22,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
 	public JdbcTokenStore tokenStore() {
 		return new JdbcTokenStore(dataSource);
 	}
-	
+
 	@Override
 	public void configure(final HttpSecurity http) throws Exception {
 		http.authorizeRequests().anyRequest().authenticated();
@@ -32,5 +32,5 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
 	public void configure(ResourceServerSecurityConfigurer resources) {
 		resources.tokenStore(tokenStore());
 	}
-	
+
 }

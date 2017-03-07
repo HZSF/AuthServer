@@ -45,12 +45,12 @@ public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 		clients.jdbc(dataSource).passwordEncoder(passwordEncoder);
-//		.withClient("acme")
-//		 .authorizedGrantTypes("authorization_code", "password",
-//		 "refresh_token")
-//		 .authorities("ROLE_USER","ROLE_ADMIN")
-//		 .scopes("read", "write")
-//		 .secret("acmesecret");
+		// .withClient("acme")
+		// .authorizedGrantTypes("authorization_code", "password",
+		// "refresh_token")
+		// .authorities("ROLE_USER","ROLE_ADMIN")
+		// .scopes("read", "write")
+		// .secret("acmesecret");
 	}
 
 	@Override
@@ -64,5 +64,5 @@ public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
 		oauthServer.passwordEncoder(passwordEncoder);
 		oauthServer.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()");
 	}
-	
+
 }
