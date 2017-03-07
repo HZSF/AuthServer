@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/token")
+@RequestMapping(value = "token")
 public class TokenController {
 
 	final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -26,7 +26,7 @@ public class TokenController {
 	@Autowired
 	private ConsumerTokenServices consumerTokenServices;
 
-	@RequestMapping(value = "/revoke", method = RequestMethod.GET)
+	@RequestMapping(value = "revoke", method = RequestMethod.GET)
 	@ResponseBody
 	public String revoketoken(Principal principal) {
 		OAuth2Authentication oAuth2Authentication = (OAuth2Authentication) principal;
