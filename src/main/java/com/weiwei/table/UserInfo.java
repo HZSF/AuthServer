@@ -1,5 +1,9 @@
 package com.weiwei.table;
 
+/*
+ * DB Table: trade.user_info
+ */
+
 public class UserInfo {
 	private Long id;
 	private Long userId;
