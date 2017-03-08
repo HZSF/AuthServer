@@ -1,4 +1,4 @@
-package com.weiwei.security.pojo;
+package com.weiwei.pojo;
 
 import java.util.Collection;
 import java.util.Collections;

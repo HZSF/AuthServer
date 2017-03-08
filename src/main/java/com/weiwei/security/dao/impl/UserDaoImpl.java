@@ -10,9 +10,9 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import com.weiwei.security.common.Constants;
+import com.weiwei.common.Constants;
+import com.weiwei.pojo.User;
 import com.weiwei.security.dao.UserDao;
-import com.weiwei.security.pojo.User;
 
 @Service
 public class UserDaoImpl implements UserDao {

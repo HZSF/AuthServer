@@ -1,4 +1,4 @@
-package com.weiwei.security.common;
+package com.weiwei.common;
 
 public class ErrorCode {
 	public static final int OK = 0;

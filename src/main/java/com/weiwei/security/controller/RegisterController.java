@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.weiwei.security.common.ErrorCode;
+import com.weiwei.common.ErrorCode;
 import com.weiwei.security.dao.UserDao;
 import com.weiwei.security.dto.GeneralResponse;
 import com.weiwei.security.dto.UserDto;
