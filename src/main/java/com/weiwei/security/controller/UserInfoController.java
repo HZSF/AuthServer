@@ -15,7 +15,7 @@ import com.weiwei.security.dto.UserDto;
 @RequestMapping("user")
 public class UserInfoController {
 
-	final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@RequestMapping(value = "update", method = RequestMethod.PUT)
 	public String update(@RequestBody @Valid UserDto userDto) {

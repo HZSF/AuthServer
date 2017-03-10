@@ -17,7 +17,7 @@ import com.weiwei.security.dao.UserDao;
 @Service
 public class UserDaoImpl implements UserDao {
 
-	final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;

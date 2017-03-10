@@ -16,7 +16,7 @@ import com.weiwei.table.UserInfo;
 @Service
 public class UserInfoDaoImpl implements UserInfoDao {
 	
-	final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
