@@ -33,7 +33,7 @@ public class RegisterController {
 
 	@Autowired
 	private UserInfoDao userInfoDao;
-	
+
 	@Autowired
 	RegisterUserService registerUserService;
 
@@ -45,19 +45,19 @@ public class RegisterController {
 			logger.info("Username already exist!");
 			return new GeneralResponse("Username already exist!", ErrorCode.USERNAME_EXISTING);
 		}
-		
+
 		List<UserInfo> userInfoList = userInfoDao.findByPhone(userDto.getPhone());
 		if (userInfoList != null && userInfoList.size() > 0) {
 			logger.info("Phone number already been registered!");
 			return new GeneralResponse("Phone number already been registered!", ErrorCode.PHONE_REGISTERED);
 		}
-		
+
 		userInfoList = userInfoDao.findByEmail(userDto.getEmail());
 		if (userInfoList != null && userInfoList.size() > 0) {
 			logger.info("Email address already been registered!");
 			return new GeneralResponse("Email address already been registered!", ErrorCode.EMAIL_REGISTERED);
 		}
-		
+
 		String registerToken = "";
 		try {
 			registerToken = registerUserService.putToCache(userDto);
@@ -68,9 +68,16 @@ public class RegisterController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("putToCache error!", e);
+			return new GeneralResponse("Temp saving user profile error!", ErrorCode.FATAL_ERROR);
 		}
-		
+
 		return new GeneralResponse(registerToken, ErrorCode.OK);
+	}
+
+	@RequestMapping(value = "validate", method = RequestMethod.POST)
+	public GeneralResponse registerValidate(@RequestBody String vtoken) {
+		
+		return new GeneralResponse("", ErrorCode.OK);
 	}
 
 }
