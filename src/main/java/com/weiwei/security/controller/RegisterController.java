@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.weiwei.common.Constants;
 import com.weiwei.common.ErrorCode;
 import com.weiwei.security.dao.UserDao;
 import com.weiwei.security.dao.UserInfoDao;
@@ -25,6 +26,7 @@ import com.weiwei.security.exception.RegisterTokenInvalidException;
 import com.weiwei.security.exception.SmsCodeInvalidException;
 import com.weiwei.security.exception.UserOnRegisteringException;
 import com.weiwei.security.service.RegisterUserService;
+import com.weiwei.security.service.impl.UserDetailsServiceImpl;
 import com.weiwei.table.UserInfo;
 
 @RestController
@@ -41,6 +43,9 @@ public class RegisterController {
 
 	@Autowired
 	RegisterUserService registerUserService;
+	
+	@Autowired
+	UserDetailsServiceImpl userDetailsServiceImpl;
 
 	@ResponseBody
 	@RequestMapping(method = RequestMethod.POST)
@@ -102,8 +107,8 @@ public class RegisterController {
 			logger.error("retrieveFromCache error!", e);
 			return new GeneralResponse("Retrieve temp user profile error!", ErrorCode.FATAL_ERROR);
 		}
-		registerUserService.saveUserDto(userDto);
-		return new GeneralResponse("", ErrorCode.OK);
+		userDetailsServiceImpl.saveUserDto(userDto);
+		return new GeneralResponse(Constants.TASK_SUCCESS, ErrorCode.OK);
 	}
 
 }

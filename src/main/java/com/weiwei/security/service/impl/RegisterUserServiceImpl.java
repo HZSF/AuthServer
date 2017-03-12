@@ -9,9 +9,7 @@ import org.ehcache.CacheManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import com.weiwei.common.Constants;
 import com.weiwei.security.dto.RegisterValidateRequest;
@@ -34,12 +32,6 @@ public class RegisterUserServiceImpl implements RegisterUserService {
 
 	@Autowired
 	private CacheManager cacheManager;
-
-	@Autowired
-	private TransactionTemplate transactionTemplate;
-
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
 
 	@Override
 	public String putToCache(UserDto userDto, String smscode) throws Exception {
@@ -115,21 +107,6 @@ public class RegisterUserServiceImpl implements RegisterUserService {
 		}
 		
 		return Optional.of(userDto);
-	}
-
-	@Override
-	public void saveUserDto(UserDto userDto) {
-		logger.info("Saving new user: {}", userDto.toString());
-		transactionTemplate.execute(status -> {
-			String sqlInsertUser = "INSERT INTO " + Constants.DBNAME_TRADE + "." + Constants.T_USER
-					+ " (username, password, authorities) VALUES (?,?,?)";
-			String sqlInsertUserInfo = "INSERT INTO " + Constants.DBNAME_TRADE + "." + Constants.T_USER_INFO
-					+ " (user_id, phone, email, address, company, fullname) VALUES (LAST_INSERT_ID(),?,?,?,?,?)";
-			jdbcTemplate.update(sqlInsertUser,
-					new Object[] { userDto.getUsername(), userDto.getPassword(), Constants.ROLE_USER });
-			return jdbcTemplate.update(sqlInsertUserInfo, new Object[] { userDto.getPhone(), userDto.getEmail(),
-					userDto.getAddress(), userDto.getCompany(), userDto.getFullname() });
-		});
 	}
 
 }

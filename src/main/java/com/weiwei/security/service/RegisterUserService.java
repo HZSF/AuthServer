@@ -11,6 +11,4 @@ public interface RegisterUserService {
 
 	Optional<UserDto> retrieveThenRemoveFromCache(RegisterValidateRequest request) throws Exception;
 	
-	void saveUserDto(UserDto userDto);
-
 }
