@@ -17,7 +17,6 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 
 import com.weiwei.common.Constants;
-import com.weiwei.security.dto.UserDto;
 
 @SpringBootApplication
 @EnableCaching
@@ -32,12 +31,12 @@ public class AuthServerApplication {
 		return CacheManagerBuilder.newCacheManagerBuilder()
 				.using(new LookupTransactionManagerProviderConfiguration(BitronixTransactionManagerLookup.class))
 				.withCache(Constants.CACHE_REGISTER_USER, CacheConfigurationBuilder
-						.newCacheConfigurationBuilder(String.class, UserDto.class, ResourcePoolsBuilder.heap(500))
-						.withExpiry(Expirations.timeToLiveExpiration(Duration.of(1, TimeUnit.MINUTES)))
+						.newCacheConfigurationBuilder(String.class, String.class, ResourcePoolsBuilder.heap(500))
+						.withExpiry(Expirations.timeToLiveExpiration(Duration.of(5, TimeUnit.MINUTES)))
 						.add(new XAStoreConfiguration(Constants.CACHE_REGISTER_USER)).build())
 				.withCache(Constants.CACHE_TOKEN_USERNAME, CacheConfigurationBuilder
 						.newCacheConfigurationBuilder(String.class, String.class, ResourcePoolsBuilder.heap(500))
-						.withExpiry(Expirations.timeToLiveExpiration(Duration.of(1, TimeUnit.MINUTES)))
+						.withExpiry(Expirations.timeToLiveExpiration(Duration.of(5, TimeUnit.MINUTES)))
 						.add(new XAStoreConfiguration(Constants.CACHE_TOKEN_USERNAME)).build())
 				.build(true);
 	}

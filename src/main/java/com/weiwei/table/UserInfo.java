@@ -12,6 +12,19 @@ public class UserInfo {
 	private String address;
 	private String company;
 
+	public UserInfo() {
+
+	}
+
+	public UserInfo(Long userId, String phone, String email, String address, String company) {
+		super();
+		this.userId = userId;
+		this.phone = phone;
+		this.email = email;
+		this.address = address;
+		this.company = company;
+	}
+
 	public Long getId() {
 		return id;
 	}

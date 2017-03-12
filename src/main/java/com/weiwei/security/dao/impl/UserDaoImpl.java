@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.weiwei.common.Constants;
@@ -23,9 +24,9 @@ public class UserDaoImpl implements UserDao {
 	private JdbcTemplate jdbcTemplate;
 
 	@Override
-	public Optional<User> findByUsername(String username) {
+	public Optional<UserDetails> findByUsername(String username) {
 		String sql = "SELECT * FROM " + Constants.DBNAME_TRADE + "." + Constants.T_USER + " WHERE username = ?";
-		User user = null;
+		UserDetails user = null;
 		try {
 			user = jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<User>(User.class), username);
 		} catch (EmptyResultDataAccessException e) {

@@ -2,10 +2,10 @@ package com.weiwei.security.dao;
 
 import java.util.Optional;
 
-import com.weiwei.pojo.User;
+import org.springframework.security.core.userdetails.UserDetails;
 
 public interface UserDao {
 
-	Optional<User> findByUsername(String username);
-
+	Optional<UserDetails> findByUsername(String username);
+	
 }

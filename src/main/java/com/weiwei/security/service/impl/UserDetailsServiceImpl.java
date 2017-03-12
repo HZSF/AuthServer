@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.weiwei.pojo.User;
 import com.weiwei.security.dao.UserDao;
 
 @Service
@@ -19,7 +18,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Optional<User> useroptional = userDao.findByUsername(username);
+		Optional<UserDetails> useroptional = userDao.findByUsername(username);
 		if (useroptional.isPresent()) {
 			return useroptional.get();
 		} else {

@@ -1,6 +1,8 @@
 package com.weiwei.security.controller;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 
 import javax.validation.Valid;
 
@@ -17,7 +19,10 @@ import com.weiwei.common.ErrorCode;
 import com.weiwei.security.dao.UserDao;
 import com.weiwei.security.dao.UserInfoDao;
 import com.weiwei.security.dto.GeneralResponse;
+import com.weiwei.security.dto.RegisterValidateRequest;
 import com.weiwei.security.dto.UserDto;
+import com.weiwei.security.exception.RegisterTokenInvalidException;
+import com.weiwei.security.exception.SmsCodeInvalidException;
 import com.weiwei.security.exception.UserOnRegisteringException;
 import com.weiwei.security.service.RegisterUserService;
 import com.weiwei.table.UserInfo;
@@ -58,25 +63,46 @@ public class RegisterController {
 			return new GeneralResponse("Email address already been registered!", ErrorCode.EMAIL_REGISTERED);
 		}
 
+		Random random = new Random();
+		StringBuilder sbsms = new StringBuilder();
+		for (int i = 0; i < 6; i++) {
+			sbsms.append(random.nextInt(10));
+		}
+
 		String registerToken = "";
 		try {
-			registerToken = registerUserService.putToCache(userDto);
+			registerToken = registerUserService.putToCache(userDto, sbsms.toString());
 		} catch (UserOnRegisteringException e) {
-			e.printStackTrace();
-			logger.error("Someone is registering {}", userDto.getUsername());
+			logger.info("Someone is registering {}", userDto.getUsername());
+			logger.error("Username on cache!", e);
 			return new GeneralResponse("Someone is registering this username!", ErrorCode.USERNAME_REGISTERING);
 		} catch (Exception e) {
-			e.printStackTrace();
 			logger.error("putToCache error!", e);
 			return new GeneralResponse("Temp saving user profile error!", ErrorCode.FATAL_ERROR);
 		}
+
+		// sendSms();
 
 		return new GeneralResponse(registerToken, ErrorCode.OK);
 	}
 
 	@RequestMapping(value = "validate", method = RequestMethod.POST)
-	public GeneralResponse registerValidate(@RequestBody String vtoken) {
-		
+	public GeneralResponse registerValidate(@RequestBody @Valid RegisterValidateRequest request) {
+		UserDto userDto;
+		try {
+			Optional<UserDto> OptionalUserDto = registerUserService.retrieveThenRemoveFromCache(request);
+			userDto = OptionalUserDto.get();
+		} catch (RegisterTokenInvalidException e) {
+			logger.error("Invalid register token!", e);
+			return new GeneralResponse("Invalid registration token!", ErrorCode.REGISTER_TOKEN_INVALID);
+		} catch (SmsCodeInvalidException e) {
+			logger.error("Invalid smscode!", e);
+			return new GeneralResponse("Invalid sms code!", ErrorCode.SMSCODE_INVALID);
+		} catch (Exception e) {
+			logger.error("retrieveFromCache error!", e);
+			return new GeneralResponse("Retrieve temp user profile error!", ErrorCode.FATAL_ERROR);
+		}
+		registerUserService.saveUserDto(userDto);
 		return new GeneralResponse("", ErrorCode.OK);
 	}
 

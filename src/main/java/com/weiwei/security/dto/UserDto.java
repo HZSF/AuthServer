@@ -13,19 +13,22 @@ public class UserDto implements Serializable {
 	@NotNull
 	@NotEmpty
 	private String username;
+
 	@NotNull
 	@NotEmpty
 	private String password;
-	@NotNull
-	@NotEmpty
-	private String fullname;
+
 	@NotNull
 	@NotEmpty
 	private String phone;
 
+	private String fullname;
+
 	private String email;
 
 	private String address;
+
+	private String company;
 
 	public String getUsername() {
 		return username;
@@ -75,10 +78,18 @@ public class UserDto implements Serializable {
 		this.address = address;
 	}
 
+	public String getCompany() {
+		return company;
+	}
+
+	public void setCompany(String company) {
+		this.company = company;
+	}
+
 	@Override
 	public String toString() {
 		return "UserDto [username=" + username + ", password=" + password + ", fullname=" + fullname + ", phone="
-				+ phone + ", email=" + email + ", address=" + address + "]";
+				+ phone + ", email=" + email + ", address=" + address + ", company=" + company + "]";
 	}
 
 }
