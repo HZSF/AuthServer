@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 public class UserDto implements Serializable {
@@ -24,6 +25,7 @@ public class UserDto implements Serializable {
 
 	private String fullname;
 
+	@Email
 	private String email;
 
 	private String address;

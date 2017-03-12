@@ -49,7 +49,7 @@ public class RegisterController {
 	UserDetailsServiceImpl userDetailsServiceImpl;
 
 	@ResponseBody
-	@RequestMapping(method = RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.PUT)
 	public GeneralResponse register(@RequestBody @Valid UserDto userDto) {
 		logger.info("register request: {}", userDto.toString());
 		if (userDao.findByUsername(userDto.getUsername()).isPresent()) {
