@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.weiwei.common.Constants;
+import com.weiwei.common.ErrorCode;
+import com.weiwei.security.dto.GeneralResponse;
+
 @RestController
 @RequestMapping(value = "token")
 public class TokenController {
@@ -28,12 +32,12 @@ public class TokenController {
 
 	@RequestMapping(value = "revoke", method = RequestMethod.GET)
 	@ResponseBody
-	public String revoketoken(Principal principal) {
+	public GeneralResponse revoketoken(Principal principal) {
 		OAuth2Authentication oAuth2Authentication = (OAuth2Authentication) principal;
 		OAuth2AccessToken accessToken = authorizationServerTokenServices.getAccessToken(oAuth2Authentication);
 		consumerTokenServices.revokeToken(accessToken.getValue());
 		logger.info("User {} logout.", principal.getName());
-		return accessToken.getValue();
+		return new GeneralResponse(Constants.TASK_SUCCESS, ErrorCode.OK);
 	}
 
 }

@@ -78,7 +78,7 @@ public class RegisterUserServiceImpl implements RegisterUserService {
 		String jsonStrUserDto = "";
 		String jsonStrUsernameTuple = "";
 		UserDto userDto = null;
-		
+
 		transactionManager.begin();
 		try {
 			jsonStrUsernameTuple = usernameTupleCache.get(tokenKey);
@@ -86,26 +86,26 @@ public class RegisterUserServiceImpl implements RegisterUserService {
 				throw new RegisterTokenInvalidException("Token invalid!");
 			}
 			logger.info("Pass token validation!");
-			
+
 			UsernameTuple usernameTuple = mapper.readValue(jsonStrUsernameTuple, UsernameTuple.class);
 			if (!usernameTuple.getSmsCode().equals(request.getSmscode())) {
 				throw new SmsCodeInvalidException("smscode invalid!");
 			}
 			logger.info("Pass sms code validation!");
-			
+
 			String username = usernameTuple.getUsername();
 			jsonStrUserDto = userDtoCache.get(username);
 			userDto = mapper.readValue(jsonStrUserDto, UserDto.class);
 			logger.info("Got userDto from cache!");
-			
-			//Remove current record from cache
+
+			// Remove current record from cache
 			usernameTupleCache.remove(tokenKey);
 			userDtoCache.remove(username);
 			logger.info("Removed current record from cache!");
 		} finally {
 			transactionManager.commit();
 		}
-		
+
 		return Optional.of(userDto);
 	}
 

@@ -30,7 +30,10 @@ public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
 	@Autowired
 	private UserDetailsService userDetailsService;
 
-	private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+	@Bean
+	public BCryptPasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
 	@Bean
 	public JdbcTokenStore tokenStore() {
@@ -44,7 +47,7 @@ public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
 
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		clients.jdbc(dataSource).passwordEncoder(passwordEncoder);
+		clients.jdbc(dataSource).passwordEncoder(passwordEncoder());
 		// .withClient("acme")
 		// .authorizedGrantTypes("authorization_code", "password",
 		// "refresh_token")
@@ -61,7 +64,7 @@ public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
 
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
-		oauthServer.passwordEncoder(passwordEncoder);
+		oauthServer.passwordEncoder(passwordEncoder());
 		oauthServer.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()");
 	}
 

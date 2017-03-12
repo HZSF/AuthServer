@@ -5,8 +5,7 @@ package com.weiwei.table;
  */
 
 public class UserInfo {
-	private Long id;
-	private Long userId;
+	private String username;
 	private String phone;
 	private String email;
 	private String address;
@@ -16,29 +15,21 @@ public class UserInfo {
 
 	}
 
-	public UserInfo(Long userId, String phone, String email, String address, String company) {
+	public UserInfo(String username, String phone, String email, String address, String company) {
 		super();
-		this.userId = userId;
+		this.username = username;
 		this.phone = phone;
 		this.email = email;
 		this.address = address;
 		this.company = company;
 	}
 
-	public Long getId() {
-		return id;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Long getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Long userId) {
-		this.userId = userId;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getPhone() {

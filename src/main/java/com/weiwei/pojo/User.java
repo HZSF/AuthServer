@@ -8,18 +8,17 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public class User implements UserDetails {
-	
+
 	private static final long serialVersionUID = -5580847214743422145L;
 
 	public static UserDetails create(String username, String password, String... authorities) {
 		return new User(username, password, authorities);
 	}
-	
+
 	public User() {
 		this("", "");
 	}
 
-	private Long id;
 	private Collection<GrantedAuthority> authorities;
 	private String password;
 	private String username;
@@ -28,20 +27,20 @@ public class User implements UserDetails {
 	private User(String username, String password) {
 		this(username, password, Collections.EMPTY_LIST);
 	}
-	
-	private User(String username, String password, String...authorities) {
+
+	private User(String username, String password, String... authorities) {
 		this.username = username;
 		this.password = password;
 		this.authorities = AuthorityUtils.createAuthorityList(authorities);
 	}
-	
+
 	private User(String username, String password, Collection<GrantedAuthority> authorities) {
 		super();
 		this.username = username;
 		this.password = password;
 		this.authorities = authorities;
 	}
-	
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return authorities;
@@ -77,14 +76,6 @@ public class User implements UserDetails {
 		return true;
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-	
 	public void setAutorities(String authorityString) {
 		this.authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(authorityString);
 	}

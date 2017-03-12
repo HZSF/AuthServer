@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -43,7 +44,7 @@ public class RegisterController {
 
 	@Autowired
 	RegisterUserService registerUserService;
-	
+
 	@Autowired
 	UserDetailsServiceImpl userDetailsServiceImpl;
 
@@ -107,6 +108,11 @@ public class RegisterController {
 			logger.error("retrieveFromCache error!", e);
 			return new GeneralResponse("Retrieve temp user profile error!", ErrorCode.FATAL_ERROR);
 		}
+
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		String hashedPassword = passwordEncoder.encode(userDto.getPassword());
+		userDto.setPassword(hashedPassword);
+
 		userDetailsServiceImpl.saveUserDto(userDto);
 		return new GeneralResponse(Constants.TASK_SUCCESS, ErrorCode.OK);
 	}

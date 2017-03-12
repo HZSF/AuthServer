@@ -18,12 +18,12 @@ import com.weiwei.security.dto.UserDto;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-	
+
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	private UserDao userDao;
-	
+
 	@Autowired
 	private TransactionTemplate transactionTemplate;
 
@@ -39,20 +39,20 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			throw new UsernameNotFoundException("username {" + username + "} not found!");
 		}
 	}
-	
+
 	public void saveUserDto(UserDto userDto) {
 		logger.info("Saving new user: {}", userDto.toString());
 		transactionTemplate.execute(status -> {
 			String sqlInsertUser = "INSERT INTO " + Constants.DBNAME_TRADE + "." + Constants.T_USER
 					+ " (username, password, authorities) VALUES (?,?,?)";
 			String sqlInsertUserInfo = "INSERT INTO " + Constants.DBNAME_TRADE + "." + Constants.T_USER_INFO
-					+ " (user_id, phone, email, address, company, fullname) VALUES (LAST_INSERT_ID(),?,?,?,?,?)";
+					+ " (username, phone, email, address, company, fullname) VALUES (?,?,?,?,?,?)";
 			jdbcTemplate.update(sqlInsertUser,
 					new Object[] { userDto.getUsername(), userDto.getPassword(), Constants.ROLE_USER });
-			return jdbcTemplate.update(sqlInsertUserInfo, new Object[] { userDto.getPhone(), userDto.getEmail(),
-					userDto.getAddress(), userDto.getCompany(), userDto.getFullname() });
+			return jdbcTemplate.update(sqlInsertUserInfo, new Object[] { userDto.getUsername(), userDto.getPhone(),
+					userDto.getEmail(), userDto.getAddress(), userDto.getCompany(), userDto.getFullname() });
 		});
-		logger.info("Complete new user saving");
+		logger.info("Complete new user saving.");
 	}
 
 }
