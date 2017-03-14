@@ -30,14 +30,26 @@ public class AuthServerApplication {
 	public CacheManager getCacheManager() {
 		return CacheManagerBuilder.newCacheManagerBuilder()
 				.using(new LookupTransactionManagerProviderConfiguration(BitronixTransactionManagerLookup.class))
+				//(username, UserDto)
 				.withCache(Constants.CACHE_REGISTER_USER, CacheConfigurationBuilder
 						.newCacheConfigurationBuilder(String.class, String.class, ResourcePoolsBuilder.heap(500))
 						.withExpiry(Expirations.timeToLiveExpiration(Duration.of(5, TimeUnit.MINUTES)))
 						.add(new XAStoreConfiguration(Constants.CACHE_REGISTER_USER)).build())
+				//(token, username)
 				.withCache(Constants.CACHE_TOKEN_USERNAME, CacheConfigurationBuilder
 						.newCacheConfigurationBuilder(String.class, String.class, ResourcePoolsBuilder.heap(500))
 						.withExpiry(Expirations.timeToLiveExpiration(Duration.of(5, TimeUnit.MINUTES)))
 						.add(new XAStoreConfiguration(Constants.CACHE_TOKEN_USERNAME)).build())
+				//(token, email)
+				.withCache(Constants.CACHE_TOKEN_EMAIL, CacheConfigurationBuilder
+						.newCacheConfigurationBuilder(String.class, String.class, ResourcePoolsBuilder.heap(500))
+						.withExpiry(Expirations.timeToLiveExpiration(Duration.of(10, TimeUnit.MINUTES)))
+						.add(new XAStoreConfiguration(Constants.CACHE_TOKEN_EMAIL)).build())
+				//(email, username)
+				.withCache(Constants.CACHE_EMAIL_USERNAME, CacheConfigurationBuilder
+						.newCacheConfigurationBuilder(String.class, String.class, ResourcePoolsBuilder.heap(500))
+						.withExpiry(Expirations.timeToLiveExpiration(Duration.of(10, TimeUnit.MINUTES)))
+						.add(new XAStoreConfiguration(Constants.CACHE_EMAIL_USERNAME)).build())
 				.build(true);
 	}
 

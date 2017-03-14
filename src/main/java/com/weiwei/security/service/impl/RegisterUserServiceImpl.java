@@ -1,7 +1,6 @@
 package com.weiwei.security.service.impl;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.ehcache.Cache;
@@ -19,6 +18,7 @@ import com.weiwei.security.exception.SmsCodeInvalidException;
 import com.weiwei.security.exception.UserOnRegisteringException;
 import com.weiwei.security.service.RegisterUserService;
 import com.weiwei.security.vo.UsernameTuple;
+import com.weiwei.utils.RandomGenerator;
 
 import bitronix.tm.BitronixTransactionManager;
 
@@ -39,7 +39,7 @@ public class RegisterUserServiceImpl implements RegisterUserService {
 				String.class);
 		Cache<String, String> usernameTupleCache = cacheManager.getCache(Constants.CACHE_TOKEN_USERNAME, String.class,
 				String.class);
-		String registerToken = generateToken();
+		String registerToken = RandomGenerator.generateToken();
 		ObjectMapper mapper = new ObjectMapper();
 		String jsonStrUserDto = mapper.writeValueAsString(userDto);
 		String jsonStrUsernameTuple = mapper.writeValueAsString(new UsernameTuple(userDto.getUsername(), smscode));
@@ -52,7 +52,7 @@ public class RegisterUserServiceImpl implements RegisterUserService {
 				throw new UserOnRegisteringException("Another customer is registering a same username!");
 			}
 			while (usernameTupleCache.containsKey(registerToken)) {
-				registerToken = generateToken();
+				registerToken = RandomGenerator.generateToken();
 			}
 			userDtoCache.put(userDto.getUsername(), jsonStrUserDto);
 			usernameTupleCache.put(registerToken, jsonStrUsernameTuple);
@@ -61,10 +61,6 @@ public class RegisterUserServiceImpl implements RegisterUserService {
 		}
 
 		return registerToken;
-	}
-
-	private String generateToken() {
-		return UUID.randomUUID().toString().toUpperCase();
 	}
 
 	@Override
